@@ -64,45 +64,18 @@
                     </div>
                 </a>
             </div>
-        </div>
-        <div>
-            <!-- <canvas id="myChart"></canvas> -->
-            <div class="container mx-auto">
-    <div class="flex flex-col items-center w-full max-w-screen-lg p-6 pb-6 mt-10 bg-white rounded-lg shadow-xl sm:p-8">
-        <h2 class="text-xl font-bold">Grafik Pemasukan dan Pengeluaran</h2>
-        <div class="flex items-end flex-grow w-full mt-2 space-x-2 sm:space-x-3">
-            @foreach ($bulan as $index => $namaBulan)
-                @php
-                    $pemasukanHeightClass = 'h-' . min(intval($pemasukans[$index + 1] / 1000), 96);
-                    $pengeluaranHeightClass = 'h-' . min(intval($pengeluarans[$index + 1] / 1000), 96);
-                @endphp
-                <div class="relative flex flex-col items-center flex-grow pb-5 group">
-                    <span class="absolute top-0 hidden -mt-6 text-xs font-bold group-hover:block">
-                        Pemasukan : Rp{{ number_format($pemasukans[$index + 1] ?? 0, 0, ',', '.') }}
-                        Pengeluaran : Rp{{ number_format($pengeluarans[$index + 1] ?? 0, 0, ',', '.') }}
-                    </span>
-                    <div class="flex items-end w-full">
-                        <div class="relative flex justify-center flex-grow bg-indigo-400 {{ $pemasukanHeightClass }}"></div>
-                        <div class="relative flex justify-center flex-grow bg-red-200 {{ $pengeluaranHeightClass }}"></div>
-                    </div>
-                    <span class="absolute bottom-0 text-xs font-bold">{{ $namaBulan }}</span>
-                </div>
-            @endforeach
-        </div>
-        <div class="flex w-full mt-3">
-            <div class="flex items-center ml-auto">
-                <span class="block w-4 h-4 bg-indigo-400"></span>
-                <span class="ml-1 text-xs font-medium">Pemasukan</span>
-            </div>
-            <div class="flex items-center ml-4">
-                <span class="block w-4 h-4 bg-red-200"></span>
-                <span class="ml-1 text-xs font-medium">Pengeluaran</span>
-            </div>
-        </div>
-    </div>
-</div>
-    <!-- Component End  -->
+            <div class="container px-4 mx-auto">
 
+                        <div class="p-6 m-20 bg-white rounded shadow">
+                            {!! $chart->container() !!}
+                        </div>
+
+                    </div>
         </div>
+    
     </div>
+
+    <script src="{{ $chart->cdn() }}"></script>
+
+    {{ $chart->script() }}
 </x-app-layout>
