@@ -11,6 +11,7 @@ use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LaporanMasukController;
 use App\Http\Controllers\LaporanKeluarController;
+use App\Http\Controllers\ModalAwalController;
 use App\Models\UangMasuk;
 use App\Models\UangKeluar;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     // Route::get('/dataharian', [DataHarianController::class, 'index'])->name('dataharian.index');
     Route::get('/inputdata', [InputDataController::class, 'index'])->name('inputdata.index');
+
+    Route::get('/modalAwal', [ModalAwalController::class, 'index'])->name('modalAwal.index');
+    Route::get('/modalAwal/create', [ModalAwalController::class, 'create'])->name('modalAwal.create');
+    Route::post('/modalAwal', [ModalAwalController::class, 'store'])->name('modalAwal.store');
+    Route::get('/modalAwal/{id}/edit', [ModalAwalController::class, 'edit'])->name('modalAwal.edit');
+    Route::match(['put', 'patch'],'/modalAwal/{id}', [ModalAwalController::class, 'update'])->name('modalAwal.update');
+    Route::delete('/modalAwal/{id}', [ModalAwalController::class, 'destroy'])->name('modalAwal.destroy');
 
     Route::get('/datapemasukan', [DataPemasukannController::class, 'index'])->name('datapemasukan.index');
     Route::get('/datapemasukan/create', [DataPemasukannController::class, 'create'])->name('datapemasukan.create');

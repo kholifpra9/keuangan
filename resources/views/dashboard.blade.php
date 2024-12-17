@@ -13,8 +13,23 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap pt-4 gap-4 responsiv-margin">
-                <div class="card bg-blue-600 p-6 mt-6" style="width: 18rem;">
+            <div class="flex flex-wrap pt-2 gap-2 responsiv-margin">
+                <a href="{{ route('modalAwal.create') }}">
+                    <div class="card bg-blue-700 p-1 mt-6" style="width: 14rem;">
+                        <div class="card-body flex">
+                            <img src="image/accounting-book.png" class="mb-4 hidden sm:block h-20" alt="">
+                            <div>
+                                <h5 class="card-title text-white">Modal Awal Hari ini</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary text-white">Rp.</h6>
+                                <p class="card-text text-white">
+                                {{ number_format(App\Models\ModalAwals::whereDate('tanggal', \Carbon\Carbon::today())->sum('jumlah'), 0, ',', '.') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card bg-blue-600 p-1 mt-6" style="width: 14rem;">
                     <div class="card-body flex"> 
                         <img src="image/wallet.png" class="mb-4 mr-2 hidden sm:block h-20" alt="">
                         <div>
@@ -34,7 +49,7 @@
                 </div>
 
                 <a href="{{ route('datapengeluaran.index') }}">
-                    <div class="card bg-red-600 p-6 mt-6" style="width: 18rem;">
+                    <div class="card bg-red-600 p-1 mt-6" style="width: 14rem;">
                         <div class="card-body flex">
                             <img src="image/accounting-book.png" class="mb-4 hidden sm:block h-20" alt="">
                             <div>
@@ -50,7 +65,7 @@
 
                 <a href="{{ route('datapemasukan.index')}}">
 
-                    <div class="card bg-green-600 p-6 mt-6" style="width: 18rem;">
+                    <div class="card bg-green-600 p-1 mt-6" style="width: 14rem;">
                         <div class="card-body flex">
                             <img src="image/save-money.png" class="mb-4 hidden sm:block h-20" alt="">
                             <div>
