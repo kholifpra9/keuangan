@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('uang_masuks', function (Blueprint $table) {
             $table->id();
-            $table->integer('jumlah');
+            $table->foreignId('barang_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('qty', false, false);
+            $table->double('jumlah');
             $table->date('tanggal');
             $table->string('keterangan_pemasukan');
 

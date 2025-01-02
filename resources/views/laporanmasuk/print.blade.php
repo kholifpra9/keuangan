@@ -15,24 +15,30 @@
     <p>Laporan Uang Masuk</p>
   
     <table class="table table-bordered">
+    <tr>
+            <td rowspan="1" colspan="7">TOTAL : Rp.{{ number_format(App\Models\UangKeluar::sum('jumlah'), 0, ',', '.') }}</td>
+        </tr>
         <tr>
-            <th>No</th>
+            <th>NO</th>
             <th>Tanggal</th>
-            <th>Keterangan Pemasukan</th>
-            <th>Jumlah Pemasukan</th>
+            <th>Barang</th>
+            <th>Kategori</th>
+            <th>Keterangan Pengeluaran</th>
+            <th>QTY</th>
+            <th>Jumlah Pengeluaran</th>
         </tr>
         @php $num = 1; @endphp
-        @foreach($uang_masuks as $um)
+        @foreach($uang_masuks as $uang_masuk)
         <tr>
-            <td>{{ $num++ }}</td>
-            <td>{{ $um->tanggal }}</td>
-            <td>{{ $um->keterangan_pemasukan }}</td>
-            <td>{{ $um->jumlah }}</td>
+            <td>{{ $num++ }}</td>   
+            <td>{{ $uang_masuk->tanggal}}</td>
+            <td>{{ $uang_masuk->barang->nama_barang}} - {{ $uang_masuk->barang->suplier }}</td>
+            <td>{{ $uang_masuk->barang->kategori}}</td>
+            <td>{{ $uang_masuk->keterangan_pemasukan}}</td>
+            <td>{{ $uang_masuk->qty}}</td>
+            <td>Rp.{{ number_format($uang_masuk->jumlah, 0, ',', '.') }}</td>
         </tr>
         @endforeach
-        <tr>
-                                <td rowspan="1" colspan="4">TOTAL : Rp.{{ number_format(App\Models\UangMasuk::sum('jumlah'), 0, ',', '.') }}</td>
-                            </tr>
     </table>
   
 </body>

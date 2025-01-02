@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\UangMasuk;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class DataPemasukannController extends Controller
 {
@@ -23,8 +25,9 @@ class DataPemasukannController extends Controller
             $query->whereBetween('tanggal', [$tgl_awal, $tgl_akhir]);
         }
 
-        $uang_masuks = $query->get();
-        return view('datapemasukan.index', compact('uang_masuks'));
+        $data['uang_masuks'] = $query->with('barang')->get();
+
+        return view('datapemasukan.index', $data);
     }
 
     /**
@@ -32,7 +35,8 @@ class DataPemasukannController extends Controller
      */
     public function create()
     {
-        return view('datapemasukan.create');    
+        $data['barangs'] = Barang::all();
+        return view('datapemasukan.create', $data);    
     }
 
     /**
@@ -41,30 +45,43 @@ class DataPemasukannController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tanggal' => 'required|max:255',
+            'barang_id' => 'required|exists:barangs,id',
+            'qty' => 'required',
+            'tanggal' => 'required|date',
             'keterangan_pemasukan' => 'required|max:255',
-            'jumlah' => 'required|numeric',
         ]);
 
-        UangMasuk::create($validated);
+        $barang = Barang::findOrFail($validated['barang_id']);
 
-        $notification = array(
-            'message' => "Data Uang Masuk berhasil ditambahkan!",
+        $jumlah = $validated['qty'] * $barang->harga;
+
+        if ($barang->stok < $validated['qty']) {
+            throw ValidationException::withMessages([
+                'qty' => 'Jumlah barang tidak boleh melebihi stok yang tersedia.',
+            ]);
+        }
+        $barang->decrement('stok', $validated['qty']);
+
+        UangMasuk::create([
+            'tanggal' => $validated['tanggal'],
+            'barang_id' => $validated['barang_id'],
+            'qty' => $validated['qty'],
+            'jumlah' => $jumlah,
+            'keterangan_pemasukan' => $validated['keterangan_pemasukan'],
+        ]);
+
+        $notification = [
+            'message' => "Data Pemasukan berhasil ditambahkan!",
             'alert-type' => 'success'
-        );
-
-        $notifications = array(
-            'message' => "Data Uang Masuk gagal ditambahkan!",
-            'alert-type' => 'error'
-        );
-        
+        ];
 
         if ($request->simpan == true) {
             return redirect()->route('datapemasukan.index')->with($notification);
         } else {
-            return redirect()->route('datapemasukan.create')->with($notifications);
+            return redirect()->route('datapemasukan.create')->with($notification);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -119,25 +136,20 @@ class DataPemasukannController extends Controller
      */
     public function destroy(string $id)
     {
-        $datapemasukan = UangMasuk::findOrFail($id)->delete();
+        $datapemasukan = UangMasuk::findOrFail($id);
 
-        $notification = array(
-            'message' => 'Data Berhasil Dihapus',
+        $barang = $datapemasukan->barang;
+        if ($barang) {
+            $barang->increment('stok', $datapemasukan->qty);
+        }
+
+        $datapemasukan->delete();
+
+        $notification = [
+            'message' => "Data Pemasukan berhasil dihapus dan stok diperbarui!",
             'alert-type' => 'success'
-        );
+        ];
 
-        
-        $notification = array(
-            'message' => "Data Uang Masuk berhasil dihapus!",
-            'alert-type' => 'success'
-        );
-
-        $notifications = array(
-            'message' => "Data Uang Masuk gagal dihapus!",
-            'alert-type' => 'error'
-        );
-
-
-        return redirect()->route('datapemasukan.index', $datapemasukan)->with($notification);
+        return redirect()->route('datapemasukan.index')->with($notification);
     }
 }

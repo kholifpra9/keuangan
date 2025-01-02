@@ -42,7 +42,7 @@
                     </x-primary-button>
                     @endrole('stafKeuangan')
                     <br>
-                    <table class="table">
+                    <table class="table ">
                         <thead>
                             <tr>
                                 <td rowspan="1" colspan="5">TOTAL : Rp.{{ number_format(App\Models\UangMasuk::sum('jumlah'), 0, ',', '.') }}</td>
@@ -52,7 +52,10 @@
                             <tr>
                                 <th>NO</th>
                                 <th>Tanggal</th>
+                                <th>Barang</th>
+                                <th>Kategori</th>
                                 <th>Keterangan Pemasukan</th>
+                                <th>QTY</th>
                                 <th>Jumlah Pemasukan</th>
                                 @role('stafKeuangan')
                                 <th>Aksi</th>
@@ -62,21 +65,19 @@
                         <tbody>
                             @php $num = 1; @endphp
                             @foreach ($uang_masuks as $uang_masuk)
-                                <tr class="table-active">
+                                <tr>
                                     <td>{{ $num++ }}</td>
                                     <td>{{ $uang_masuk->tanggal}}</td>
+                                    <td>{{ $uang_masuk->barang->nama_barang}} - {{ $uang_masuk->barang->suplier }}</td>
+                                    <td>{{ $uang_masuk->barang->kategori}}</td>
                                     <td>{{ $uang_masuk->keterangan_pemasukan}}</td>
-                                    <td>{{ $uang_masuk->jumlah}}</td>
+                                    <td>{{ $uang_masuk->qty}}</td>
+                                    <td>Rp.{{ number_format($uang_masuk->jumlah, 0, ',', '.') }}</td>
                                     @role('stafKeuangan')
                                     <td>
-                                        <x-primary-button tag="a" href="{{route('datapemasukan.edit', $uang_masuk->id)}}">
-                                            EDIT
-                                        </x-primary-button>
 
-                                        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal',
-                                                    'confirm-datapemasukan-deletion')" x-on:click="$dispatch('set-action',
-                                                    '{{ route('datapemasukan.destroy', $uang_masuk->id) }}')">
-                                            {{ __('Delete')}}
+                                        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-datapemasukan-deletion')" x-on:click="$dispatch('set-action', '{{ route('datapemasukan.destroy', $uang_masuk->id) }}')">
+                                            {{ __('Delete') }}
                                         </x-danger-button>
                                     </td>
                                     @endrole('stafKeuangan')
@@ -84,43 +85,43 @@
                             @endforeach
                         </tbody>
                     </table>
-                    
-                   
-
-                    @foreach ($uang_masuks as $data)
-                        <x-modal name="confirm-datapemasukan-deletion" focusable maxWidth="xl">
-                            <form method="post" action="{{ route('datapemasukan.destroy', $data->id) }}" class="p-6">
-                                @csrf
-                                @method('delete')
-
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    {{ __('Apakah anda yakin akan menghapus data?') }}
-                                </h2>
-
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ __('Setelah proses dilakukan. Data akan dihilangkan secara permanen.') }}
-                                </p>
-
-                                <div class="mt-6 flex justify-end">
-                                    <x-secondary-button x-on:click="$dispatch('close')">
-                                        {{ __('Cancel') }}
-                                    </x-secondary-button>
-
-                                    <x-danger-button class="ml-3">
-                                        {{ __('Delete Data') }}
-                                    </x-danger-button>
-                                </div>
-                            </form>
-                        </x-modal>
-                    @endforeach
-
+                    @role('stafKeuangan')
+                    <x-primary-button class="mb-2" tag="a" href="{{route('datapemasukan.create')}}">
+                        TAMBAH DATA
+                    </x-primary-button>
+                    @endrole('stafKeuangan')
                 </div>
+               
             </div>
             <br>
-
             <!-- <a href="{{ route('datapemasukan.create') }}">Tambah Data</a> -->
             <br>
         </div>
     </div>
 
 </x-app-layout>
+
+<x-modal name="confirm-datapemasukan-deletion" focusable maxWidth="xl">
+    <form method="post" x-bind:action="action" class="p-6">
+        @csrf
+        @method('delete')
+
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            {{ __('Apakah anda yakin akan menghapus data?') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {{ __('Setelah proses dilakukan. Data akan dihilangkan secara permanen.') }}
+        </p>
+
+        <div class="mt-6 flex justify-end">
+            <x-secondary-button x-on:click="$dispatch('close')">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+            <x-danger-button class="ml-3">
+                {{ __('Delete Data') }}
+            </x-danger-button>
+        </div>
+    </form>
+</x-modal>

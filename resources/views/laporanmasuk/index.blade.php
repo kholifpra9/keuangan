@@ -48,18 +48,24 @@
                             <tr>
                                 <th>NO</th>
                                 <th>Tanggal</th>
+                                <th>Barang</th>
+                                <th>Kategori</th>
                                 <th>Keterangan Pemasukan</th>
+                                <th>QTY</th>
                                 <th>Jumlah Pemasukan</th>
                             </tr>
                         </thead>
                         <tbody>
                         @php $num = 1; @endphp
                             @foreach ($uang_masuks as $uang_masuk)
-                                <tr class="table-active">
-                                    <td>{{ $num++ }}</td>
+                                <tr>
+                                <td>{{ $num++ }}</td>
                                     <td>{{ $uang_masuk->tanggal}}</td>
+                                    <td>{{ $uang_masuk->barang->nama_barang}} - {{ $uang_masuk->barang->suplier }}</td>
+                                    <td>{{ $uang_masuk->barang->kategori}}</td>
                                     <td>{{ $uang_masuk->keterangan_pemasukan}}</td>
-                                    <td>{{ $uang_masuk->jumlah}}</td>
+                                    <td>{{ $uang_masuk->qty}}</td>
+                                    <td>Rp.{{ number_format($uang_masuk->jumlah, 0, ',', '.') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

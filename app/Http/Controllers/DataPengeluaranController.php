@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\UangKeluar;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -32,7 +33,8 @@ class DataPengeluaranController extends Controller
      */
     public function create()
     {
-        return view('datapengeluaran.create');    
+        $data['barangs'] = Barang::all();
+        return view('datapengeluaran.create', $data);    
     }
 
     /**
@@ -41,30 +43,35 @@ class DataPengeluaranController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tanggal' => 'required|max:255',
+            'barang_id' => 'required|exists:barangs,id',
+            'qty' => 'required',
+            'tanggal' => 'required|date',
+            'jumlah' => 'required',
             'keterangan_pengeluaran' => 'required|max:255',
-            'jumlah' => 'required|numeric',
         ]);
 
-        UangKeluar::create($validated);
+        $barang = Barang::findOrFail($validated['barang_id']);
 
-       
-        $notification = array(
-            'message' => "Data Uang Keluar berhasil ditambahkan!",
+        $barang->increment('stok', $validated['qty']);
+
+        UangKeluar::create([
+            'tanggal' => $validated['tanggal'],
+            'barang_id' => $validated['barang_id'],
+            'qty' => $validated['qty'],
+            'jumlah' => $validated['jumlah'],
+            'keterangan_pengeluaran' => $validated['keterangan_pengeluaran'],
+        ]);
+
+        $notification = [
+            'message' => "Data Pengeluaran berhasil ditambahkan!",
             'alert-type' => 'success'
-        );
+        ];
 
-        $notifications = array(
-            'message' => "Data Uang Keluar gagal ditambahkan!",
-            'alert-type' => 'error'
-        );
-
-        return redirect()->route('datapengeluaran.index')->with($notification);
-        // if ($request->simpan == true) {
-        //     return redirect()->route('datapengeluaran.index')->with($notification);
-        // } else {
-        //     return redirect()->route('datapengeluaran.create')->with($notification);
-        // }
+        if ($request->simpan == true) {
+            return redirect()->route('datapengeluaran.index')->with($notification);
+        } else {
+            return redirect()->route('datapengeluaran.create')->with($notification);
+        }
     }
 
     /**
@@ -120,20 +127,20 @@ class DataPengeluaranController extends Controller
      */
     public function destroy(string $id)
     {
-        $datapengeluaran = UangKeluar::findOrFail($id)->delete();
+        $datapengeluaran = UangKeluar::findOrFail($id);
 
-        
-        $notification = array(
-            'message' => "Data Uang Keluar berhasil dihapus!",
+        $barang = $datapengeluaran->barang;
+        if ($barang) {
+            $barang->decrement('stok', $datapengeluaran->qty);
+        }
+
+        $datapengeluaran->delete();
+
+        $notification = [
+            'message' => "Data Pengeluaran berhasil dihapus dan stok diperbarui!",
             'alert-type' => 'success'
-        );
+        ];
 
-        $notifications = array(
-            'message' => "Data Uang Keluar gagal dihapus!",
-            'alert-type' => 'error'
-        );
-
-
-        return redirect()->route('datapengeluaran.index', $datapengeluaran)->with($notification);
+        return redirect()->route('datapengeluaran.index')->with($notification);
     }
 }

@@ -12,8 +12,15 @@ class UangMasuk extends Model
     protected $table = 'uang_masuks';
 
     protected $fillable = [
-        'jumlah',
+        'barang_id',
         'tanggal',
+        'qty',
+        'jumlah',
         'keterangan_pemasukan',
     ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id');
+    }
 }

@@ -44,26 +44,30 @@
                             <tr>
                                 <th>NO</th>
                                 <th>Tanggal</th>
+                                <th>Barang</th>
+                                <th>Kategori</th>
                                 <th>Keterangan Pengeluaran</th>
+                                <th>QTY</th>
                                 <th>Jumlah Pengeluaran</th>
+                                @role('stafKeuangan')
                                 <th>Aksi</th>
+                                @endrole('stafKeuangan')
                             </tr>
                         </thead>
                         <tbody>
                             @php $num = 1; @endphp
                             @foreach ($uang_keluars as $uang_keluar)
-                                <tr class="table-active">
-                                    <td>{{ $num++ }}</td>
-                                    <td>{{ $uang_keluar->tanggal }}</td>
-                                    <td>{{ $uang_keluar->keterangan_pengeluaran }}</td>
-                                    <td>{{ $uang_keluar->jumlah }}</td>
+                                <tr>
+                                    <td>{{ $num++ }}</td>   
+                                    <td>{{ $uang_keluar->tanggal}}</td>
+                                    <td>{{ $uang_keluar->barang->nama_barang}} - {{ $uang_keluar->barang->suplier }}</td>
+                                    <td>{{ $uang_keluar->barang->kategori}}</td>
+                                    <td>{{ $uang_keluar->keterangan_pengeluaran}}</td>
+                                    <td>{{ $uang_keluar->qty}}</td>
+                                    <td>Rp.{{ number_format($uang_keluar->jumlah, 0, ',', '.') }}</td>
                                     @role('stafKeuangan')
                                     <td>
                                         <!-- Edit button -->
-                                        <x-primary-button tag="a"
-                                            href="{{ route('datapengeluaran.edit', $uang_keluar->id) }}">
-                                            EDIT
-                                        </x-primary-button>
 
                                         <!-- Delete button using a form -->
                                         <form method="POST"
@@ -72,10 +76,8 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal',
-                                                    'confirm-datapengeluaran-deletion')" x-on:click="$dispatch('set-action',
-                                                    '{{ route('datapengeluaran.destroy', $uang_keluar->id) }}')">
-                                                {{ __('Delete')}}
+                                            <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-datapengeluaran-deletion')" x-on:click="$dispatch('set-action', '{{ route('datapengeluaran.destroy', $uang_keluar->id) }}')">
+                                                {{ __('Delete') }}
                                             </x-danger-button>
                                         </form>
                                     </td>
@@ -90,33 +92,6 @@
                         TAMBAH DATA
                     </x-primary-button>
                     @endrole('stafKeuangan')
-
-                    @foreach ($uang_keluars as $data)
-                        <x-modal name="confirm-datapengeluaran-deletion" focusable maxWidth="xl">
-                            <form method="post" action="{{ route('datapengeluaran.destroy', $data->id) }}" class="p-6">
-                                @csrf
-                                @method('delete')
-
-                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                    {{ __('Apakah anda yakin akan menghapus data?') }}
-                                </h2>
-
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ __('Setelah proses dilakukan. Data akan dihilangkan secara permanen.') }}
-                                </p>
-
-                                <div class="mt-6 flex justify-end">
-                                    <x-secondary-button x-on:click="$dispatch('close')">
-                                        {{ __('Cancel') }}
-                                    </x-secondary-button>
-
-                                    <x-danger-button class="ml-3">
-                                        {{ __('Delete Data') }}
-                                    </x-danger-button>
-                                </div>
-                            </form>
-                        </x-modal>
-                    @endforeach
                 </div>
                 </div>
                 </div>
@@ -128,3 +103,27 @@
     </div>
 
 </x-app-layout>
+<x-modal name="confirm-datapengeluaran-deletion" focusable maxWidth="xl">
+    <form method="post" x-bind:action="action" class="p-6">
+        @csrf
+        @method('delete')
+
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            {{ __('Apakah anda yakin akan menghapus data?') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {{ __('Setelah proses dilakukan. Data akan dihilangkan secara permanen.') }}
+        </p>
+
+        <div class="mt-6 flex justify-end">
+            <x-secondary-button x-on:click="$dispatch('close')">
+                {{ __('Cancel') }}
+            </x-secondary-button>
+
+            <x-danger-button class="ml-3">
+                {{ __('Delete Data') }}
+            </x-danger-button>
+        </div>
+    </form>
+</x-modal>

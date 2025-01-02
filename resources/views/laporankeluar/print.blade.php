@@ -16,23 +16,30 @@
   
     <table class="table table-bordered">
         <tr>
-            <th>No</th>
+            <td rowspan="1" colspan="7">TOTAL : Rp.{{ number_format(App\Models\UangKeluar::sum('jumlah'), 0, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <th>NO</th>
             <th>Tanggal</th>
+            <th>Barang</th>
+            <th>Kategori</th>
             <th>Keterangan Pengeluaran</th>
+            <th>QTY</th>
             <th>Jumlah Pengeluaran</th>
         </tr>
         @php $num = 1; @endphp
-        @foreach($uang_keluars as $um)
+        @foreach($uang_keluars as $uang_keluar)
         <tr>
-            <td>{{ $num++ }}</td>
-            <td>{{ $um->tanggal }}</td>
-            <td>{{ $um->keterangan_pemasukan }}</td>
-            <td>{{ $um->jumlah }}</td>
+            <td>{{ $num++ }}</td>   
+            <td>{{ $uang_keluar->tanggal}}</td>
+            <td>{{ $uang_keluar->barang->nama_barang}} - {{ $uang_keluar->barang->suplier }}</td>
+            <td>{{ $uang_keluar->barang->kategori}}</td>
+            <td>{{ $uang_keluar->keterangan_pengeluaran}}</td>
+            <td>{{ $uang_keluar->qty}}</td>
+            <td>Rp.{{ number_format($uang_keluar->jumlah, 0, ',', '.') }}</td>
         </tr>
         @endforeach
-        <tr>
-                                <td rowspan="1" colspan="4">TOTAL : Rp.{{ number_format(App\Models\UangKeluar::sum('jumlah'), 0, ',', '.') }}</td>
-                            </tr>
+        
     </table>
   
 </body>

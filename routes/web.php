@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataHarianController;
 use App\Http\Controllers\DataPemasukannController;
@@ -61,6 +62,13 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     // Route::get('/dataharian', [DataHarianController::class, 'index'])->name('dataharian.index');
     Route::get('/inputdata', [InputDataController::class, 'index'])->name('inputdata.index');
+
+    Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
+    Route::get('/barang/create', [BarangController::class, 'create'])->name('barang.create');
+    Route::post('/barang', [BarangController::class, 'store'])->name('barang.store');
+    Route::get('/barang/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
+    Route::match(['put', 'patch'],'/barang/{id}', [BarangController::class, 'update'])->name('barang.update');
+    Route::delete('/barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
 
     Route::get('/modalAwal', [ModalAwalController::class, 'index'])->name('modalAwal.index');
     Route::get('/modalAwal/create', [ModalAwalController::class, 'create'])->name('modalAwal.create');
