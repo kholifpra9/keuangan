@@ -27,7 +27,7 @@
                             <select id="barang_id" name="barang_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                                 <option value="">Pilih Barang</option>
                                 @foreach($barangs as $barang)
-                                    <option value="{{ $barang->id }}" data-harga="{{ $barang->harga }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
+                                    <option value="{{ $barang->id }}" data-harga="{{ $barang->harga_beli }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
                                         {{ $barang->nama_barang }} - {{$barang->suplier}}
                                     </option>
                                 @endforeach
@@ -58,10 +58,7 @@
                         <!-- Jumlah -->
                         <div class="max-w-xl mb-4">
                             <label for="jumlah" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Jumlah Pengeluaran</label>
-                            <input type="text" id="jumlah" name="jumlah" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            @error('jumlah')
-                                <span class="text-sm text-red-600 dark:text-red-400">{{ $message }}</span>
-                            @enderror
+                            <input type="number" id="jumlah" name="jumlah" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" readonly>
                         </div>
 
                         <!-- Buttons -->
@@ -75,4 +72,26 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const barangSelect = document.getElementById('barang_id');
+            const qtyInput = document.getElementById('qty');
+            const jumlahInput = document.getElementById('jumlah');
+
+            barangSelect.addEventListener('change', function () {
+                const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+                const harga = parseFloat(selectedOption.getAttribute('data-harga')) || 0;
+                const qty = parseInt(qtyInput.value) || 0;
+                jumlahInput.value = harga * qty;
+            });
+
+            qtyInput.addEventListener('input', function () {
+                const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+                const harga = parseFloat(selectedOption.getAttribute('data-harga')) || 0;
+                const qty = parseInt(qtyInput.value) || 0;
+                jumlahInput.value = harga * qty;
+            });
+        });
+    </script>
 </x-app-layout>

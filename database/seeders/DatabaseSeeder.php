@@ -27,16 +27,31 @@ class DatabaseSeeder extends Seeder
             // UangKeluarSeeder::class,
         ]);
 
+        function roundToNearest500($number, $mode = 'up')
+        {
+            if ($mode === 'up') {
+                return ceil($number / 500) * 500; // Membulatkan ke atas
+            } elseif ($mode === 'down') {
+                return floor($number / 500) * 500; // Membulatkan ke bawah
+            } else {
+                return round($number / 500) * 500; // Membulatkan ke kelipatan terdekat
+            }
+        }
+
         $barangs = [];
 
         for ($i = 1; $i <= 10; $i++) {
+            $harga_beli = rand(4000, 18000);
+            $harga_jual_raw = $harga_beli + rand(500, 2000);
+            $harga_jual = roundToNearest500($harga_jual_raw, 'up');
             $barangs[] = [
                 'id' => $i,
                 'nama_barang' => ['Whiskas for Cat', 'Whiskas for Kitten', 'Royal Canin for Dog', 'Royal Canin for Puppy', 'Pro Plan for Cat', 'Pro Plan for Dog', 'Felix for Cat', 'Friskies for Kitten', 'Me-O for Fish', 'Pedigree for Dog'][array_rand(['Whiskas for Cat', 'Whiskas for Kitten', 'Royal Canin for Dog', 'Royal Canin for Puppy', 'Pro Plan for Cat', 'Pro Plan for Dog', 'Felix for Cat', 'Friskies for Kitten', 'Me-O for Fish', 'Pedigree for Dog'])],
                 'suplier' => ['Suplier A', 'Suplier B', 'Suplier C'][array_rand(['Suplier A', 'Suplier B', 'Suplier C'])],
                 'kategori' => ['pakan', 'susu', 'pasir'][array_rand(['pakan', 'susu', 'pasir'])],
                 'stok' => rand(50, 200),
-                'harga' => rand(5000, 20000),
+                'harga_jual' => $harga_jual,
+                'harga_beli' => $harga_beli,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
@@ -52,7 +67,7 @@ class DatabaseSeeder extends Seeder
                 $uangMasuks[] = [
                     'barang_id' => $barang['id'],
                     'qty' => $qty,
-                    'jumlah' => $qty * $barang['harga'],
+                    'jumlah' => $qty * $barang['harga_jual'],
                     'tanggal' => Carbon::now()->subDays(rand(1, 30))->toDateString(),
                     'keterangan_pemasukan' => 'Penjualan Barang ' . $barang['nama_barang'],
                     'created_at' => Carbon::now(),
@@ -71,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 $uangKeluars[] = [
                     'barang_id' => $barang['id'],
                     'qty' => $qty,
-                    'jumlah' => $qty * $barang['harga'],
+                    'jumlah' => $qty * $barang['harga_beli'],
                     'tanggal' => Carbon::now()->subDays(rand(1, 30))->toDateString(),
                     'keterangan_pengeluaran' => 'Pengadaan Barang ' . $barang['nama_barang'],
                     'created_at' => Carbon::now(),

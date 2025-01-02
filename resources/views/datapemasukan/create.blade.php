@@ -28,7 +28,7 @@
                             <select id="barang_id" name="barang_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                                 <option value="">Pilih Barang</option>
                                 @foreach($barangs as $barang)
-                                    <option value="{{ $barang->id }}" data-harga="{{ $barang->harga }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
+                                    <option value="{{ $barang->id }}" data-harga="{{ $barang->harga_jual }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
                                         {{ $barang->nama_barang }}{{ $barang->nama_barang }} - {{$barang->suplier}}
                                     </option>
                                 @endforeach

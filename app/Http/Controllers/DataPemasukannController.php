@@ -53,7 +53,7 @@ class DataPemasukannController extends Controller
 
         $barang = Barang::findOrFail($validated['barang_id']);
 
-        $jumlah = $validated['qty'] * $barang->harga;
+        $jumlah = $validated['qty'] * $barang->harga_jual;
 
         if ($barang->stok < $validated['qty']) {
             throw ValidationException::withMessages([

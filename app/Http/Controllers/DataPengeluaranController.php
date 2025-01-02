@@ -46,11 +46,12 @@ class DataPengeluaranController extends Controller
             'barang_id' => 'required|exists:barangs,id',
             'qty' => 'required',
             'tanggal' => 'required|date',
-            'jumlah' => 'required',
             'keterangan_pengeluaran' => 'required|max:255',
         ]);
 
         $barang = Barang::findOrFail($validated['barang_id']);
+
+        $jumlah = $validated['qty'] * $barang->harga_beli;
 
         $barang->increment('stok', $validated['qty']);
 
@@ -58,7 +59,7 @@ class DataPengeluaranController extends Controller
             'tanggal' => $validated['tanggal'],
             'barang_id' => $validated['barang_id'],
             'qty' => $validated['qty'],
-            'jumlah' => $validated['jumlah'],
+            'jumlah' => $jumlah,
             'keterangan_pengeluaran' => $validated['keterangan_pengeluaran'],
         ]);
 
@@ -67,7 +68,7 @@ class DataPengeluaranController extends Controller
             'alert-type' => 'success'
         ];
 
-        if ($request->simpan == true) {
+        if ($request->save == true) {
             return redirect()->route('datapengeluaran.index')->with($notification);
         } else {
             return redirect()->route('datapengeluaran.create')->with($notification);

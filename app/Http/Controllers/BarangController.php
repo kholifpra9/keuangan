@@ -26,7 +26,8 @@ class BarangController extends Controller
             'suplier' => 'required|max:255',
             'kategori' => 'required|in:pakan,susu,pasir',
             'stok' => 'required|integer|min:1',
-            'harga' => 'required|min:1',
+            'harga_jual' => 'required|min:1',
+            'harga_beli' => 'required|min:1',
         ]);
 
         Barang::create($validated);
@@ -58,7 +59,8 @@ class BarangController extends Controller
             'suplier' => 'required|max:255',
             'kategori' => 'required|in:pakan,susu,pasir',
             'stok' => 'required|integer|min:1',
-            'harga' => 'required|min:1',
+            'harga_jual' => 'required|min:1',
+            'harga_beli' => 'required|min:1',
         ]);
 
         $barang->update($validated);

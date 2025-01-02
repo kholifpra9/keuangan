@@ -20,7 +20,8 @@
                             <th>Supplier</th>
                             <th>Kategori</th>
                             <th>Jumlah Stok</th>
-                            <th>Harga</th>
+                            <th>Harga Jual</th>
+                            <th>Harga Beli</th>
                             <th>Aksi</th>
                         </tr>
                         </thead>
@@ -33,7 +34,8 @@
                                 <td>{{ $barang->suplier }}</td>
                                 <td>{{ $barang->kategori }}</td>
                                 <td>{{ $barang->stok }}</td>
-                                <td>Rp.{{ number_format($barang->harga, 0, ',', '.') }}</td>
+                                <td>Rp.{{ number_format($barang->harga_jual, 0, ',', '.') }}</td>
+                                <td>Rp.{{ number_format($barang->harga_beli, 0, ',', '.') }}</td>
                                 <td>
                                     <x-primary-button tag="a" href="{{ route('barang.edit', $barang->id) }}">Edit</x-primary-button>
                                     <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-barang-deletion')" x-on:click="$dispatch('set-action', '{{ route('barang.destroy', $barang->id) }}')">

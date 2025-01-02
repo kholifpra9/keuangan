@@ -40,16 +40,23 @@
 
                         <!-- Stok -->
                         <div class="max-w-xl">
-                            <x-input-label for="stok" value="Jumlah Stok (stok)" />
-                            <x-text-input id="stok" type="number" name="stok" class="mt-1 block w-full" value="{{ old('stok', $barang->stok) }}" min="0" required />
+                            <x-input-label for="stok" value="Jumlah Stok (stok) - tidak dapat di edit - tambah ulang barang untuk memperbaiki input stok" />
+                            <x-text-input id="stok" type="number" name="stok" class="mt-1 block w-full" value="{{ old('stok', $barang->stok) }}" min="0" readonly required />
                             <x-input-error class="mt-2" :messages="$errors->get('stok')" />
                         </div>
 
                         <!-- Harga -->
                         <div class="max-w-xl">
-                            <x-input-label for="harga" value="Harga" />
-                            <x-text-input id="harga" type="number" name="harga" class="mt-1 block w-full" value="{{ old('harga', $barang->harga) }}" min="0" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('harga')" />
+                            <x-input-label for="harga_beli" value="harga_beli" />
+                            <x-text-input id="harga_beli" type="number" name="harga_beli" class="mt-1 block w-full" value="{{ old('harga_beli', $barang->harga_beli) }}" min="0" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('harga_beli')" />
+                        </div>
+
+                         <!-- Harga -->
+                         <div class="max-w-xl">
+                            <x-input-label for="harga_jual" value="harga_jual" />
+                            <x-text-input id="harga_jual" type="number" name="harga_jual" class="mt-1 block w-full" value="{{ old('harga_jual', $barang->harga_jual) }}" min="0" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('harga_jual')" />
                         </div>
 
                         <!-- Buttons -->

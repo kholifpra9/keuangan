@@ -16,7 +16,8 @@ class Barang extends Model
         'suplier',
         'kategori',
         'stok',
-        'harga',
+        'harga_jual',
+        'harga_beli',
     ];
 
     public function pemasukan()

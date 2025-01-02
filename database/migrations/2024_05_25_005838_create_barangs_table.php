@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('suplier');
             $table->enum('kategori', ['pakan', 'susu', 'pasir']);
             $table->integer('stok', false, false);
-            $table->double('harga');
+            $table->double('harga_jual');
+            $table->double('harga_beli');
             $table->timestamps();
         });
     }

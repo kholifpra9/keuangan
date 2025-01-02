@@ -37,7 +37,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <td rowspan="1" colspan="5">TOTAL : Rp.{{ number_format(App\Models\UangKeluar::sum('jumlah'), 0, ',', '.') }}</td>
+                                <td rowspan="1" colspan="8">TOTAL : Rp.{{ number_format(App\Models\UangKeluar::sum('jumlah'), 0, ',', '.') }}</td>
                             </tr>
                         </thead>
                         <thead>
