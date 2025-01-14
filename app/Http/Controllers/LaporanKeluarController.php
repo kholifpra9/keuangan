@@ -34,6 +34,7 @@ class LaporanKeluarController extends Controller
 
         $pdf = Pdf::loadview('laporankeluar.print', ['uang_keluars' => $uang_keluars]);
         return $pdf->download('laporan uang keluar.pdf');
+        // return view('laporankeluar.print', ['uang_keluars' => $uang_keluars]);
     }
 
     public function export(){

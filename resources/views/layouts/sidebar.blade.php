@@ -21,12 +21,14 @@
       </li>
       <hr>
       <li>
+        @hasrole('owner')
         <x-nav-link :href="route('modalAwal.index')" :active="request()->routeIs('modalAwal.index')" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
           <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400">
           <svg viewBox="0 0 24 24" fill="none"  class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 6.34267C17.35 4.30367 14.8273 3 12 3C7.02944 3 3 7.02944 3 12C3 13.8501 3.55827 15.5699 4.51555 17M21 12C21 16.9706 16.9706 21 12 21C10.961 21 9.96308 20.8239 9.03452 20.5M12 16H13C13.6667 16 15 15.6 15 14C15 12.4 13.6667 12 13 12H11C10.3333 12 9 11.6 9 10C9 8.4 10.3333 8 11 8H12M12 16H9M12 16V18M15 8H12M12 8V6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
           </span>
           <span class="text-sm font-semibold">Modal Awal Harian</span>
         </x-nav-link>
+        @endhasrole
       </li>
       <hr>
       <li>
